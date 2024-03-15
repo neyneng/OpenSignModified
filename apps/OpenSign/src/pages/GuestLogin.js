@@ -16,6 +16,7 @@ function GuestLogin() {
     const initAndSendOtp = async () => {
       await handleServerUrl();
       await SendOtp();
+      await VerifyOTP();
     };
 
     initAndSendOtp();
@@ -60,7 +61,6 @@ function GuestLogin() {
         if (response.data) {
           const otp = response.data.result;
           setOTP(otp);
-          await VerifyOTP();
         }
       } catch (error) {
         alert("something went wrong!");
