@@ -9,14 +9,12 @@ function GuestLogin() {
   const { id, userMail, contactBookId, serverUrl } = useParams();
   let navigate = useNavigate();
   const [email, setEmail] = useState(userMail);
-  const [OTP, setOTP] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const initAndSendOtp = async () => {
       await handleServerUrl();
       await SendOtp();
-      await VerifyOTP();
     };
 
     initAndSendOtp();
@@ -60,7 +58,8 @@ function GuestLogin() {
 
         if (response.data) {
           const otp = response.data.result;
-          setOTP(otp);
+          console.log(response.data)
+          await VerifyOTP(otp);
         }
       } catch (error) {
         alert("something went wrong!");
@@ -71,12 +70,12 @@ function GuestLogin() {
   };
 
   //verify OTP send on via email
-  const VerifyOTP = async () => {
+  const VerifyOTP = async (otp) => {
     const serverUrl =
       localStorage.getItem("baseUrl") && localStorage.getItem("baseUrl");
     const parseId =
       localStorage.getItem("parseAppId") && localStorage.getItem("parseAppId");
-    if (OTP) {
+    if (otp) {
       try {
         let url = `${serverUrl}functions/AuthLoginAsMail/`;
         const headers = {
@@ -85,7 +84,7 @@ function GuestLogin() {
         };
         let body = {
           email: email,
-          otp: OTP
+          otp: otp
         };
         let user = await axios.post(url, body, { headers: headers });
         if (user.data.result === "Invalid Otp") {
