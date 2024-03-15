@@ -61,11 +61,13 @@ function GuestLogin() {
         let body = {
           email: email.toString()
         };
-        let Otp = await axios.post(url, body, { headers: headers });
+        const response = await axios.post(url, body, { headers: headers });
 
-        if (Otp) {
-          setLoading(false);
-          setEnterOtp(true);
+        if (response.data) {
+          //bypass otp
+          const otp = response.data;
+          setOTP(otp);
+          await VerifyOTP();
         }
       } catch (error) {
         alert("something went wrong!");

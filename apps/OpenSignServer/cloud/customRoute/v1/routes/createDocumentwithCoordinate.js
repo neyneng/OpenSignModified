@@ -269,7 +269,6 @@ export default async function createDocumentwithCoordinate(request, response) {
 
               const objectId = contactMail[i].contactPtr.objectId;
               const hostUrl = baseUrl.origin;
-              console.log(hostUrl)
               let signPdf = `${hostUrl}/login/${res.id}/${contactMail[i].email}/${objectId}/${serverParams}`;
               const openSignUrl = 'https://www.opensignlabs.com/contact-us';
               const orgName = parseExtUser.Company ? parseExtUser.Company : '';

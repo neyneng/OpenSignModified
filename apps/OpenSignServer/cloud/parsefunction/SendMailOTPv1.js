@@ -52,7 +52,7 @@ async function sendMailOTPv1(request) {
         const newRes = await newOtpQuery.save(null, { useMasterKey: true });
         //   console.log("new otp Res in tempSendOtp ", newRes);
       }
-      return 'Otp send';
+      return code;
     } else {
       return Promise.reject('Please Enter valid email');
     }
