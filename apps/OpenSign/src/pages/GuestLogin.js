@@ -11,7 +11,6 @@ function GuestLogin() {
   let navigate = useNavigate();
   const [email, setEmail] = useState(userMail);
   const [OTP, setOTP] = useState("");
-  // const [EnterOTP, setEnterOtp] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -22,7 +21,8 @@ function GuestLogin() {
     };
 
     initAndSendOtp();
-  }, [SendOtp, handleServerUrl]);
+  }, []);
+
   //function generate serverUrl and parseAppId from url and save it in local storage
   const handleServerUrl = () => {
     //split url in array from '&'
@@ -66,7 +66,6 @@ function GuestLogin() {
         const response = await axios.post(url, body, { headers: headers });
 
         if (response.data) {
-          //bypass otp
           const otp = response.data;
           setOTP(otp);
           await VerifyOTP();
@@ -174,116 +173,6 @@ function GuestLogin() {
               />
             </div>
           </div>
-
-          {!EnterOTP ? (
-            <div className="row">
-              <div className="col-sm-6 KLO">
-                <span className="welcomeText">Welcome Back !</span>
-                <br />
-                <span className="KNLO">
-                  Verification code is sent to your email
-                </span>
-                <div className="card card-box" style={{ borderRadius: "0px" }}>
-                  <div className="card-body">
-                    <input
-                      type="email"
-                      name="mobile"
-                      value={email}
-                      disabled
-                      className="loginInput"
-                    />
-                    <br />
-                  </div>
-                </div>
-                <div className="btnContainer">
-                  {loading ? (
-                    <button
-                      type="button"
-                      style={{
-                        background: themeColor,
-                        color: "white"
-                      }}
-                      className="verifyBtn"
-                      disabled
-                    >
-                      <span
-                        className="spinner-border spinner-border-sm "
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      Loading...
-                    </button>
-                  ) : (
-                    <button
-                      className="verifyBtn"
-                      style={{
-                        background: themeColor,
-                        color: "white",
-                        marginLeft: "0px !important"
-                      }}
-                      onClick={(e) => SendOtp(e)}
-                    >
-                      Send OTP
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="row">
-              <div className="col-sm-6 KLO">
-                <span className="welcomeText">Welcome Back !</span>
-                <br />
-                <span className="KNLO">You will get a OTP via Email</span>
-                <div className="card card-box">
-                  <div className="card-body">
-                    <label>Enter Verification Code</label>
-                    <input
-                      type="number"
-                      className="loginInput"
-                      name="OTP"
-                      value={OTP}
-                      onChange={handleChange}
-                    />
-
-                    <br />
-                  </div>
-                </div>
-                <div>
-                  {loading ? (
-                    <button
-                      style={{
-                        background: themeColor,
-                        color: "white"
-                      }}
-                      className="verifyBtn"
-                      type="button"
-                      disabled
-                    >
-                      <span
-                        className="spinner-border spinner-border-sm "
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      Loading...
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={(e) => VerifyOTP(e)}
-                      style={{
-                        background: themeColor,
-                        color: "white"
-                      }}
-                      className="verifyBtn"
-                    >
-                      Verify
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       )}
     </div>
