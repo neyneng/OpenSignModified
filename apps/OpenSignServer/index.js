@@ -60,6 +60,10 @@ if (process.env.SMTP_ENABLE) {
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT || 465,
     secure: process.env.SMTP_SECURE || true,
+    ignoreTLS: true,
+    tls: {
+      rejectUnauthorized: false,
+    },
     auth: {
       user: process.env.SMTP_USER_EMAIL,
       pass: process.env.SMTP_PASS,
@@ -215,7 +219,7 @@ if (!process.env.TESTING) {
 
     const migrate = isWindows
       ? `set APPLICATION_ID=${process.env.APP_ID}&& set SERVER_URL=http://localhost:8080/app&& set MASTER_KEY=${process.env.MASTER_KEY}&& npx parse-dbtool migrate`
-      : `APPLICATION_ID=${process.env.APP_ID} SERVER_URL=http://localhost:8080/app MASTER_KEY=${process.env.MASTER_KEY} npx parse-dbtool migrate`;
+      : `APPLICATION_ID=${process.env.APP_ID} SERVER_URL=${process.env.SERVER_URL} MASTER_KEY=${process.env.MASTER_KEY} npx parse-dbtool migrate`;
     exec(migrate, (error, stdout, stderr) => {
       if (error) {
         console.error(`Error: ${error.message}`);

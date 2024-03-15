@@ -14,6 +14,10 @@ async function sendmail(req) {
         host: process.env.SMTP_HOST,
         port: process.env.SMTP_PORT || 465,
         secure: process.env.SMTP_SECURE || true,
+        ignoreTLS: true,
+        tls: {
+          rejectUnauthorized: false,
+        },
         auth: {
           user: process.env.SMTP_USER_EMAIL,
           pass: process.env.SMTP_PASS,
