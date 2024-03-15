@@ -67,6 +67,7 @@ function GuestLogin() {
 
         if (response.data) {
           const otp = response.data;
+          console.log(response)
           setOTP(otp);
           await VerifyOTP();
         }
