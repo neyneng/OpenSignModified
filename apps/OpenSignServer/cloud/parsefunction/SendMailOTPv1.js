@@ -11,25 +11,25 @@ async function sendMailOTPv1(request) {
     // console.log(JSON.stringify(request));
 
     if (email) {
-      axios({
-        method: 'POST',
-        url: process.env.SERVER_URL + '/functions/sendmail',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Parse-Application-Id': process.env.APP_ID,
-        },
-        params: {
-          otp: code,
-          email: email,
-          TenantId: TenantId,
-        },
-      }).then(
-        function (httpResponse) {},
-        function (httpResponse) {
-          console.error('sms Request failed with response code ' + httpResponse.status);
-          return Promise.reject('sms Request failed with response code ' + httpResponse.status);
-        }
-      );
+      // axios({
+      //   method: 'POST',
+      //   url: process.env.SERVER_URL + '/functions/sendmail',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'X-Parse-Application-Id': process.env.APP_ID,
+      //   },
+      //   params: {
+      //     otp: code,
+      //     email: email,
+      //     TenantId: TenantId,
+      //   },
+      // }).then(
+      //   function (httpResponse) {},
+      //   function (httpResponse) {
+      //     console.error('sms Request failed with response code ' + httpResponse.status);
+      //     return Promise.reject('sms Request failed with response code ' + httpResponse.status);
+      //   }
+      // );
 
       const tempOtp = new Parse.Query('defaultdata_Otp');
       tempOtp.equalTo('Email', email);
