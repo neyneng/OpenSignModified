@@ -11,19 +11,18 @@ function GuestLogin() {
   let navigate = useNavigate();
   const [email, setEmail] = useState(userMail);
   const [OTP, setOTP] = useState("");
-  const [EnterOTP, setEnterOtp] = useState(false);
+  // const [EnterOTP, setEnterOtp] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const initAndSendOtp = async () => {
-      handleServerUrl();
-      // Since SendOtp is async, we wait for any needed setup before calling it.
-      await SendOtp(); // Call without an event object
+      await handleServerUrl();
+      await SendOtp();
     };
 
     initAndSendOtp();
-  }, []); // Empty dependency array means this runs once on component mount
+  }, [SendOtp, handleServerUrl]);
   //function generate serverUrl and parseAppId from url and save it in local storage
   const handleServerUrl = () => {
     //split url in array from '&'
@@ -46,14 +45,13 @@ function GuestLogin() {
   };
 
   //send email OTP function
-  const SendOtp = async (e) => {
+  const SendOtp = async () => {
     const serverUrl =
       localStorage.getItem("baseUrl") && localStorage.getItem("baseUrl");
     const parseId =
       localStorage.getItem("parseAppId") && localStorage.getItem("parseAppId");
     if (serverUrl && localStorage) {
       setLoading(true);
-      e.preventDefault();
       setEmail(email);
 
       try {
@@ -82,8 +80,7 @@ function GuestLogin() {
   };
 
   //verify OTP send on via email
-  const VerifyOTP = async (e) => {
-    e.preventDefault();
+  const VerifyOTP = async () => {
     const serverUrl =
       localStorage.getItem("baseUrl") && localStorage.getItem("baseUrl");
     const parseId =
