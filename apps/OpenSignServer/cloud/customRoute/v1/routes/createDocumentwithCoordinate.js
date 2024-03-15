@@ -269,7 +269,7 @@ export default async function createDocumentwithCoordinate(request, response) {
 
               const objectId = contactMail[i].contactPtr.objectId;
               const hostUrl = baseUrl.origin;
-              let signPdf = `${hostUrl}/login/${res.id}/${contactMail[i].email}/${objectId}/${serverParams}`;
+              let signPdf = `${process.env.PUBLIC_URL}/login/${res.id}/${contactMail[i].email}/${objectId}/${serverParams}`;
               const openSignUrl = 'https://www.opensignlabs.com/contact-us';
               const orgName = parseExtUser.Company ? parseExtUser.Company : '';
               const themeBGcolor = '#47a3ad';
