@@ -57,8 +57,8 @@ function GuestLogin() {
         const response = await axios.post(url, body, { headers: headers });
 
         if (response.data) {
-          const otp = response.data.result;
-          console.log(response.data)
+          const otp = response.data[0].result;
+          console.log(response)
           await VerifyOTP(otp);
         }
       } catch (error) {
