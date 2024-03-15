@@ -16,10 +16,14 @@ function GuestLogin() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    handleServerUrl();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const initAndSendOtp = async () => {
+      handleServerUrl();
+      // Since SendOtp is async, we wait for any needed setup before calling it.
+      await SendOtp(); // Call without an event object
+    };
 
+    initAndSendOtp();
+  }, []); // Empty dependency array means this runs once on component mount
   //function generate serverUrl and parseAppId from url and save it in local storage
   const handleServerUrl = () => {
     //split url in array from '&'
