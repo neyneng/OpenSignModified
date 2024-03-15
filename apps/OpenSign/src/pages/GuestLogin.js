@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import "../styles/loginPage.css";
 import loader from "../assets/images/loader2.gif";
 import axios from "axios";
-import { themeColor } from "../constant/const";
 import { contractUsers } from "../constant/Utils";
 
 function GuestLogin() {
@@ -11,7 +10,6 @@ function GuestLogin() {
   let navigate = useNavigate();
   const [email, setEmail] = useState(userMail);
   const [OTP, setOTP] = useState("");
-  const [loading, setLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -39,11 +37,6 @@ function GuestLogin() {
     setIsLoading(false);
   };
 
-  const handleChange = (event) => {
-    const { value } = event.target;
-    setOTP(value);
-  };
-
   //send email OTP function
   const SendOtp = async () => {
     const serverUrl =
@@ -51,7 +44,6 @@ function GuestLogin() {
     const parseId =
       localStorage.getItem("parseAppId") && localStorage.getItem("parseAppId");
     if (serverUrl && localStorage) {
-      setLoading(true);
       setEmail(email);
 
       try {
@@ -66,8 +58,7 @@ function GuestLogin() {
         const response = await axios.post(url, body, { headers: headers });
 
         if (response.data) {
-          const otp = response.data;
-          console.log(response)
+          const otp = response.data.result;
           setOTP(otp);
           await VerifyOTP();
         }
@@ -86,7 +77,6 @@ function GuestLogin() {
     const parseId =
       localStorage.getItem("parseAppId") && localStorage.getItem("parseAppId");
     if (OTP) {
-      setLoading(true);
       try {
         let url = `${serverUrl}functions/AuthLoginAsMail/`;
         const headers = {
@@ -100,10 +90,8 @@ function GuestLogin() {
         let user = await axios.post(url, body, { headers: headers });
         if (user.data.result === "Invalid Otp") {
           alert("Invalid Otp");
-          setLoading(false);
         } else if (user.data.result === "user not found!") {
           alert("User not found!");
-          setLoading(false);
         } else {
           let _user = user.data.result;
           const parseId = localStorage.getItem("parseAppId");
@@ -124,7 +112,6 @@ function GuestLogin() {
           localStorage.setItem("accesstoken", _user.sessionToken);
           //save isGuestSigner true in local to handle login flow header in mobile view
           localStorage.setItem("isGuestSigner", true);
-          setLoading(false);
           navigate(`/load/recipientSignPdf/${id}/${contactBookId}`);
         }
       } catch (error) {
