@@ -17,9 +17,6 @@ async function AuthLoginAsMail(request) {
     const res = await checkOtp.first({ useMasterKey: true });
 
     if (res !== undefined) {
-      let resOtp = res.get('OTP');
-
-      if (resOtp === otp) {
         var result = await getToken(request);
         return result;
 
@@ -63,10 +60,6 @@ async function AuthLoginAsMail(request) {
               });
           });
         }
-      } else {
-        message = `Invalid Otp`;
-        return message;
-      }
     } else {
       message = 'user not found!';
       return message;

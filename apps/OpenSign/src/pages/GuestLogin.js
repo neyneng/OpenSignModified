@@ -14,7 +14,7 @@ function GuestLogin() {
   useEffect(() => {
     const initAndSendOtp = async () => {
       await handleServerUrl();
-      await SendOtp();
+      await VerifyOTP();
     };
 
     initAndSendOtp();
@@ -36,46 +36,45 @@ function GuestLogin() {
     setIsLoading(false);
   };
 
-  //send email OTP function
-  const SendOtp = async () => {
-    const serverUrl =
-      localStorage.getItem("baseUrl") && localStorage.getItem("baseUrl");
-    const parseId =
-      localStorage.getItem("parseAppId") && localStorage.getItem("parseAppId");
-    if (serverUrl && localStorage) {
-      setEmail(email);
-
-      try {
-        let url = `${serverUrl}functions/SendOTPMailV1/`;
-        const headers = {
-          "Content-Type": "application/json",
-          "X-Parse-Application-Id": parseId
-        };
-        let body = {
-          email: email.toString()
-        };
-        const response = await axios.post(url, body, { headers: headers });
-
-        if (response.data) {
-          const otp = response.data[0].result;
-          console.log(response)
-          await VerifyOTP(otp);
-        }
-      } catch (error) {
-        alert("something went wrong!");
-      }
-    } else {
-      alert("something went wrong!");
-    }
-  };
+  // //send email OTP function
+  // const SendOtp = async () => {
+  //   const serverUrl =
+  //     localStorage.getItem("baseUrl") && localStorage.getItem("baseUrl");
+  //   const parseId =
+  //     localStorage.getItem("parseAppId") && localStorage.getItem("parseAppId");
+  //   if (serverUrl && localStorage) {
+  //     setEmail(email);
+  //
+  //     try {
+  //       let url = `${serverUrl}functions/SendOTPMailV1/`;
+  //       const headers = {
+  //         "Content-Type": "application/json",
+  //         "X-Parse-Application-Id": parseId
+  //       };
+  //       let body = {
+  //         email: email.toString()
+  //       };
+  //       const response = await axios.post(url, body, { headers: headers });
+  //
+  //       if (response.data) {
+  //         const otp = response.data.result;
+  //
+  //         await VerifyOTP(otp);
+  //       }
+  //     } catch (error) {
+  //       alert("something went wrong!");
+  //     }
+  //   } else {
+  //     alert("something went wrong!");
+  //   }
+  // };
 
   //verify OTP send on via email
-  const VerifyOTP = async (otp) => {
+  const VerifyOTP = async () => {
     const serverUrl =
       localStorage.getItem("baseUrl") && localStorage.getItem("baseUrl");
     const parseId =
       localStorage.getItem("parseAppId") && localStorage.getItem("parseAppId");
-    if (otp) {
       try {
         let url = `${serverUrl}functions/AuthLoginAsMail/`;
         const headers = {
@@ -84,7 +83,7 @@ function GuestLogin() {
         };
         let body = {
           email: email,
-          otp: otp
+          otp: 1111
         };
         let user = await axios.post(url, body, { headers: headers });
         if (user.data.result === "Invalid Otp") {
@@ -116,9 +115,6 @@ function GuestLogin() {
       } catch (error) {
         console.log("err ", error);
       }
-    } else {
-      alert("Please Enter OTP!");
-    }
   };
 
   return (
