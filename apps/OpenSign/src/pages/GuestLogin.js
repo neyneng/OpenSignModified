@@ -59,6 +59,7 @@ function GuestLogin() {
 
         if (response.data) {
           const otp = response.data.result;
+          console.log(otp);
           setOTP(otp);
           await VerifyOTP();
         }
@@ -76,6 +77,7 @@ function GuestLogin() {
       localStorage.getItem("baseUrl") && localStorage.getItem("baseUrl");
     const parseId =
       localStorage.getItem("parseAppId") && localStorage.getItem("parseAppId");
+    console.log(OTP)
     if (OTP) {
       try {
         let url = `${serverUrl}functions/AuthLoginAsMail/`;
