@@ -8,7 +8,6 @@ import { contractUsers } from "../constant/Utils";
 function GuestLogin() {
   const { id, userMail, contactBookId, serverUrl } = useParams();
   let navigate = useNavigate();
-  const [email, setEmail] = useState(userMail);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -82,7 +81,7 @@ function GuestLogin() {
           "X-Parse-Application-Id": parseId
         };
         let body = {
-          email: email,
+          email: userMail,
           otp: 1111
         };
         let user = await axios.post(url, body, { headers: headers });
