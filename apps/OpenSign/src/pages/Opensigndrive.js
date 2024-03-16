@@ -8,8 +8,6 @@ import { useNavigate } from "react-router-dom";
 import Title from "../components/Title";
 import Parse from "parse";
 import ModalUi from "../primitives/ModalUi";
-import dotenv from 'dotenv';
-dotenv.config();
 
 function Opensigndrive() {
   const navigate = useNavigate();
@@ -191,26 +189,7 @@ function Opensigndrive() {
           const res = await template.save();
           if (res) {
             const result = JSON.parse(JSON.stringify(res));
-            console.log(res);
-            console.log(result);
-            // const apiUrl = `${process.env.PORTAL_API_BASE_URL}/api/open-sign-labs/store-folder`;
-            //
-            // const response = await fetch(apiUrl, {
-            //   method: 'POST',
-            //   headers: {
-            //     'Content-Type': 'application/json',
-            //     'X-Token': `${process.env.PORTAL_API_TOKEN}`
-            //   },
-            //   body: JSON.stringify(result)
-            // });
-            //
-            // if (response.ok) {
-            //   const responseData = await response.json();
-            //   console.log(responseData.message);
-            // } else {
-            //   // Handle errors if needed
-            //   console.error('Error:', response.statusText);
-            // }
+
             setPdfData((prev) => [...prev, result]);
             setNewFolderName();
             setIsFolderLoader(false);
