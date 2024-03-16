@@ -10,40 +10,39 @@ async function AuthLoginAsMail(request) {
     let otp = parseInt(otpN);
     let email = request.params.email;
 
-    let message;
-    //checking otp is correct or not which already save in defaultdata_Otp class
-    const checkOtp = new Parse.Query('defaultdata_Otp');
-    checkOtp.equalTo('Email', email);
-    const res = await checkOtp.first({ useMasterKey: true });
+    // let message;
+    // //checking otp is correct or not which already save in defaultdata_Otp class
+    // const checkOtp = new Parse.Query('defaultdata_Otp');
+    // checkOtp.equalTo('Email', email);
+    // const res = await checkOtp.first({ useMasterKey: true });
 
-    if (res !== undefined) {
-        var result = await getToken(request);
-        return result;
+    var result = await getToken(request);
+    return result;
 
-        async function getToken(request) {
-          return new Promise(function (resolve, reject) {
-            var query = new Parse.Query(Parse.User);
-            query.equalTo('email', email);
-            query
-              .first({ useMasterKey: true })
-              .then(user => {
-                //call loginAs function to use login method passing user objectId as a userId
+    async function getToken(request) {
+      return new Promise(function (resolve, reject) {
+        var query = new Parse.Query(Parse.User);
+        query.equalTo('email', email);
+        query
+            .first({ useMasterKey: true })
+            .then(user => {
+              //call loginAs function to use login method passing user objectId as a userId
 
-                const url = `${serverUrl}/loginAs`;
-                axios({
-                  method: 'POST',
-                  url: url,
-                  headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
-                    'X-Parse-Application-Id': APPID,
-                    'X-Parse-Master-Key': masterKEY,
-                  },
-                  params: {
-                    userId: user.id,
-                  },
-                })
+              const url = `${serverUrl}/loginAs`;
+              axios({
+                method: 'POST',
+                url: url,
+                headers: {
+                  'Content-Type': 'application/json;charset=utf-8',
+                  'X-Parse-Application-Id': APPID,
+                  'X-Parse-Master-Key': masterKEY,
+                },
+                params: {
+                  userId: user.id,
+                },
+              })
                   .then(function (res) {
-                    // console.log(res.data)
+                    console.log(res.data)
                     if (res.data) {
                       resolve(res.data);
                     } else {
@@ -53,17 +52,14 @@ async function AuthLoginAsMail(request) {
                   .catch(err => {
                     reject('user not found!');
                   });
-                // user couldn't find lets sign up!
-              })
-              .catch(() => {
-                reject('user not found!');
-              });
-          });
-        }
-    } else {
-      message = 'user not found!';
-      return message;
+              // user couldn't find lets sign up!
+            })
+            .catch(() => {
+              reject('user not found!');
+            });
+      });
     }
+
   } catch (err) {
     console.log('err in Auth');
     console.log(err);
