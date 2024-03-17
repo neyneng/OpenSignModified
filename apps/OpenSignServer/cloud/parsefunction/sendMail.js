@@ -44,17 +44,17 @@ async function sendmail(req) {
       };
       // `writeToLocalDisk` is used to create pdf file from doc url
       const ress = await writeToLocalDisk();
-      // if (ress) {
-      //   function readTolocal() {
-      //     return new Promise((resolve, reject) => {
-      //       setTimeout(() => {
-      //         let PdfBuffer = fs.readFileSync(Pdf.path);
-      //         resolve(PdfBuffer);
-      //       }, 100);
-      //     });
-      //   }
-      //   //  `PdfBuffer` used to create buffer from pdf file
-      //   let PdfBuffer = await readTolocal();
+      if (ress) {
+        function readTolocal() {
+          return new Promise((resolve, reject) => {
+            setTimeout(() => {
+              let PdfBuffer = fs.readFileSync(Pdf.path);
+              resolve(PdfBuffer);
+            }, 100);
+          });
+        }
+        //  `PdfBuffer` used to create buffer from pdf file
+        let PdfBuffer = await readTolocal();
       //   const pdfName = req.params.pdfName && `${req.params.pdfName}.pdf`;
       //   const file = {
       //     filename: pdfName || 'exported.pdf',
@@ -95,7 +95,7 @@ async function sendmail(req) {
       //       };
       //     }
       //   }
-      // }
+      }
     }
     // else {
     //   const from = req.params.from || '';
