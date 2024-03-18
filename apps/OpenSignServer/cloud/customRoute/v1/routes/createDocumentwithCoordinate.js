@@ -60,7 +60,7 @@ export default async function createDocumentwithCoordinate(request, response) {
   const sendInOrder = request.body.sendInOrder || false;
   // console.log('fileData ', fileData);
   const protocol = customAPIurl();
-  const baseUrl = new URL(process.env.SERVER_URL);
+  const baseUrl = new URL(process.env.PUBLIC_URL);
   const reqToken = request.headers['x-api-token'];
   if (!reqToken) {
     return response.status(400).json({ error: 'Please Provide API Token' });
@@ -81,19 +81,15 @@ export default async function createDocumentwithCoordinate(request, response) {
       if (signers && signers.length > 0) {
         let fileUrl;
         if (request.files?.[0]) {
-
           const file = new Parse.File(request.files?.[0]?.originalname, {
             base64: fileData?.toString('base64'),
           });
-
-          console.log(fileData?.toString('base64'))
           await file.save({ useMasterKey: true });
           fileUrl = file.url();
         } else {
           const file = new Parse.File(`${name}.pdf`, {
             base64: base64File,
           });
-          console.log(base64File)
           await file.save({ useMasterKey: true });
           fileUrl = file.url();
         }
@@ -140,8 +136,6 @@ export default async function createDocumentwithCoordinate(request, response) {
               email: element?.email || '',
               phone: element?.phone || '',
             };
-
-            console.log(`Widgets for signer ${index}:`, element.widgets);
             try {
               const res = await axios.post(createContactUrl, body, {
                 headers: { 'Content-Type': 'application/json', 'x-api-token': reqToken },
@@ -177,7 +171,7 @@ export default async function createDocumentwithCoordinate(request, response) {
             for (const widget of signer.widgets) {
               const pageNumber = widget.page;
               const page = placeHolder.find(page => page.pageNumber === pageNumber);
-              console.log('Widget data:', widget);
+
               const widgetData = {
                 xPosition: widget.x,
                 yPosition: widget.y,
@@ -197,10 +191,8 @@ export default async function createDocumentwithCoordinate(request, response) {
               };
 
               if (page) {
-                console.log("Pushed to page")
                 page.pos.push(widgetData);
               } else {
-                console.log("Pushed to place holder")
                 placeHolder.push({
                   pageNumber,
                   pos: [widgetData],
