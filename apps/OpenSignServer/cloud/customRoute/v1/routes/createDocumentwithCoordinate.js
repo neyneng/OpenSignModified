@@ -81,15 +81,19 @@ export default async function createDocumentwithCoordinate(request, response) {
       if (signers && signers.length > 0) {
         let fileUrl;
         if (request.files?.[0]) {
+
           const file = new Parse.File(request.files?.[0]?.originalname, {
             base64: fileData?.toString('base64'),
           });
+
+          console.log(fileData?.toString('base64'))
           await file.save({ useMasterKey: true });
           fileUrl = file.url();
         } else {
           const file = new Parse.File(`${name}.pdf`, {
             base64: base64File,
           });
+          console.log(base64File)
           await file.save({ useMasterKey: true });
           fileUrl = file.url();
         }
@@ -136,6 +140,8 @@ export default async function createDocumentwithCoordinate(request, response) {
               email: element?.email || '',
               phone: element?.phone || '',
             };
+
+            console.log(`Widgets for signer ${index}:`, element.widgets);
             try {
               const res = await axios.post(createContactUrl, body, {
                 headers: { 'Content-Type': 'application/json', 'x-api-token': reqToken },
@@ -167,12 +173,11 @@ export default async function createDocumentwithCoordinate(request, response) {
           );
           let updatePlaceholders = contact.map((signer, index) => {
             const placeHolder = [];
-            console.log('Constructed placeHolder array for signer:', placeHolder);
 
             for (const widget of signer.widgets) {
               const pageNumber = widget.page;
               const page = placeHolder.find(page => page.pageNumber === pageNumber);
-
+              console.log('Widget data:', widget);
               const widgetData = {
                 xPosition: widget.x,
                 yPosition: widget.y,
@@ -192,8 +197,10 @@ export default async function createDocumentwithCoordinate(request, response) {
               };
 
               if (page) {
+                console.log("Pushed to page")
                 page.pos.push(widgetData);
               } else {
+                console.log("Pushed to place holder")
                 placeHolder.push({
                   pageNumber,
                   pos: [widgetData],
@@ -210,10 +217,7 @@ export default async function createDocumentwithCoordinate(request, response) {
               placeHolder,
             };
           });
-
-          console.log('Constructed updatePlaceholders for signers:', updatePlaceholders);
           object.set('Placeholders', updatePlaceholders);
-          console.log('Setting updatePlaceholders on contracts_Document:', updatePlaceholders);
         }
         if (folderId) {
           object.set('Folder', {
@@ -229,7 +233,6 @@ export default async function createDocumentwithCoordinate(request, response) {
         newACL.setWriteAccess(userPtr.objectId, true);
         object.setACL(newACL);
         const res = await object.save(null, { useMasterKey: true });
-        console.log('Saved contracts_Document object:', res);
         const doc = {
           objectId: res.id,
           file: fileUrl,
