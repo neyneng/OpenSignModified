@@ -167,6 +167,7 @@ export default async function createDocumentwithCoordinate(request, response) {
           );
           let updatePlaceholders = contact.map((signer, index) => {
             const placeHolder = [];
+            console.log('Constructed placeHolder array for signer:', placeHolder);
 
             for (const widget of signer.widgets) {
               const pageNumber = widget.page;
@@ -209,7 +210,10 @@ export default async function createDocumentwithCoordinate(request, response) {
               placeHolder,
             };
           });
+
+          console.log('Constructed updatePlaceholders for signers:', updatePlaceholders);
           object.set('Placeholders', updatePlaceholders);
+          console.log('Setting updatePlaceholders on contracts_Document:', updatePlaceholders);
         }
         if (folderId) {
           object.set('Folder', {
@@ -225,6 +229,7 @@ export default async function createDocumentwithCoordinate(request, response) {
         newACL.setWriteAccess(userPtr.objectId, true);
         object.setACL(newACL);
         const res = await object.save(null, { useMasterKey: true });
+        console.log('Saved contracts_Document object:', res);
         const doc = {
           objectId: res.id,
           file: fileUrl,
